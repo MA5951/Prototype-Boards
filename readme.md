@@ -1,1 +1,0 @@
-![galgol](/galgol.gif)
