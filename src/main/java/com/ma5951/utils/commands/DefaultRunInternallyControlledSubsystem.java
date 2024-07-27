@@ -6,9 +6,9 @@ package com.ma5951.utils.commands;
 
 import com.ma5951.utils.subsystem.DefaultInternallyControlledSubsystem;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 
-public class DefaultRunInternallyControlledSubsystem extends CommandBase {
+public class DefaultRunInternallyControlledSubsystem extends Command {
   /** Creates a new DefultControlCommandInSubsystemControl. */
   private DefaultInternallyControlledSubsystem subsystem;
   private double setPointWhenCantMove;

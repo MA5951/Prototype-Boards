@@ -4,10 +4,10 @@
 
 package com.ma5951.utils.commands;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 import com.ma5951.utils.subsystem.PistonSubsystem;
 
-public class TogglePistonCommand extends CommandBase {
+public class TogglePistonCommand extends Command {
     private PistonSubsystem subsystem;
 
     public TogglePistonCommand(PistonSubsystem subsystem) {

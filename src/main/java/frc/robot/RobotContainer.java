@@ -6,8 +6,6 @@ package frc.robot;
 
 // import frc.robot.commands.setIntake;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
-import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -17,16 +15,13 @@ import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
  */
 public class RobotContainer {
 
-  public static final CommandJoystick leftJoystick = new CommandJoystick(0);
-  public static final CommandJoystick rightJoystick = new CommandJoystick(1);
-  public static final CommandPS4Controller joystick = new CommandPS4Controller(2);
+
 
   public RobotContainer() {
     configureBindings();
   }
 
   private void configureBindings() {
-    // leftJoystick.button(1).whileTrue(new setIntake());
   }
 
   public Command getAutonomousCommand() {

@@ -83,12 +83,13 @@ public class Robot extends TimedRobot {
 
     Proto.getInstance();
     Proto.getInstance().initializeBySettings();
+    CommandScheduler.getInstance().setDefaultCommand(Proto.getInstance(), new setProto());
   }
 
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    new setProto();
+    
   }
 
   @Override

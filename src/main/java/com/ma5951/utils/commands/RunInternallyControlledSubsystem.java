@@ -8,9 +8,9 @@ import java.util.function.Supplier;
 
 import com.ma5951.utils.subsystem.InternallyControlledSubsystem;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 
-public class RunInternallyControlledSubsystem extends CommandBase {
+public class RunInternallyControlledSubsystem extends Command {
   /** Creates a new ControlCommand. */
   private InternallyControlledSubsystem subsystem;
   private Supplier<Double> setPoint;

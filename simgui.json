@@ -5,12 +5,29 @@
         "header": {
           "open": true
         }
+      },
+      "SPARK MAX [1]": {
+        "header": {
+          "open": true
+        }
       }
     }
   },
   "NTProvider": {
     "types": {
       "/FMSInfo": "FMSInfo",
+      "/Shuffleboard/PrototypeBoard/A Enabled": "String Chooser",
+      "/Shuffleboard/PrototypeBoard/A Neutral Mode": "String Chooser",
+      "/Shuffleboard/PrototypeBoard/A Type": "String Chooser",
+      "/Shuffleboard/PrototypeBoard/B Enabled": "String Chooser",
+      "/Shuffleboard/PrototypeBoard/B Neutral Mode": "String Chooser",
+      "/Shuffleboard/PrototypeBoard/B Type": "String Chooser",
+      "/Shuffleboard/PrototypeBoard/C Enabled": "String Chooser",
+      "/Shuffleboard/PrototypeBoard/C Neutral Mode": "String Chooser",
+      "/Shuffleboard/PrototypeBoard/C Type": "String Chooser",
+      "/Shuffleboard/PrototypeBoard/D Enabled": "String Chooser",
+      "/Shuffleboard/PrototypeBoard/D Neutral Mode": "String Chooser",
+      "/Shuffleboard/PrototypeBoard/D Type": "String Chooser",
       "/Shuffleboard/Settings/Motor 1 Enabled": "String Chooser",
       "/Shuffleboard/Settings/Motor 1 Neutral Mode": "String Chooser",
       "/Shuffleboard/Settings/Motor 1 Type": "String Chooser",
