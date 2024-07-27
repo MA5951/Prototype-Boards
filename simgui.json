@@ -1,0 +1,31 @@
+{
+  "HALProvider": {
+    "Other Devices": {
+      "SPARK MAX [14]": {
+        "header": {
+          "open": true
+        }
+      }
+    }
+  },
+  "NTProvider": {
+    "types": {
+      "/FMSInfo": "FMSInfo",
+      "/Shuffleboard/Settings/Motor 1 Enabled": "String Chooser",
+      "/Shuffleboard/Settings/Motor 1 Neutral Mode": "String Chooser",
+      "/Shuffleboard/Settings/Motor 1 Type": "String Chooser",
+      "/Shuffleboard/Settings/Motor 2 Enabled": "String Chooser",
+      "/Shuffleboard/Settings/Motor 2 Neutral Mode": "String Chooser",
+      "/Shuffleboard/Settings/Motor 2 Type": "String Chooser",
+      "/Shuffleboard/Settings/Motor 3 Enabled": "String Chooser",
+      "/Shuffleboard/Settings/Motor 3 Neutral Mode": "String Chooser",
+      "/Shuffleboard/Settings/Motor 3 Type": "String Chooser",
+      "/Shuffleboard/Settings/Motor 4 Enabled": "String Chooser",
+      "/Shuffleboard/Settings/Motor 4 Neutral Mode": "String Chooser",
+      "/Shuffleboard/Settings/Motor 4 Type": "String Chooser"
+    }
+  },
+  "NetworkTables Info": {
+    "visible": true
+  }
+}
