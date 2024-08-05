@@ -1,35 +1,48 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot;
 
-// import frc.robot.commands.setIntake;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
-import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
+import frc.robot.subsystems.proto.Proto;
+import frc.robot.subsystems.swerve.SwerveDrivetrainSubsystem;
 
-/**
- * This class is where the bulk of the robot should be declared. Since Command-based is a
- * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
- * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
- * subsystems, commands, and trigger mappings) should be declared here.
- */
 public class RobotContainer {
+  public static final CommandPS5Controller
+    driverController = new CommandPS5Controller(PortMap.Controllers.driveID);
 
-  public static final CommandJoystick leftJoystick = new CommandJoystick(0);
-  public static final CommandJoystick rightJoystick = new CommandJoystick(1);
-  public static final CommandPS4Controller joystick = new CommandPS4Controller(2);
+  private void registerCommands() {
+  }
 
   public RobotContainer() {
+    registerCommands();
+
+    SwerveDrivetrainSubsystem.getInstance();
+
     configureBindings();
   }
 
   private void configureBindings() {
-    // leftJoystick.button(1).whileTrue(new setIntake());
-  }
+    driverController.R2().whileTrue(new InstantCommand(
+      () -> SwerveDrivetrainSubsystem.getInstance().FactorVelocityTo(
+        0.4)
+    )).whileFalse(
+      new InstantCommand(
+      () -> SwerveDrivetrainSubsystem.getInstance().FactorVelocityTo(
+        1)
+    ));
 
-  public Command getAutonomousCommand() {
-    return null;
+    driverController.triangle().whileTrue(
+      new InstantCommand(SwerveDrivetrainSubsystem.getInstance()::updateOffset)
+    );
+
+
+    driverController.square().whileTrue(
+      new InstantCommand(
+        () -> Proto.getInstance().activateMotors()
+      )
+    ).whileFalse(
+      new InstantCommand(
+        () -> Proto.getInstance().stopMotors()
+      )
+    );
   }
 }

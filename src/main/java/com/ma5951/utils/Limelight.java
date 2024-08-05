@@ -7,17 +7,17 @@
 
 package com.ma5951.utils;
 
-import java.io.IOException;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.Timer;
 
 public class Limelight {
-  private double KDELTA_Y = 0;
-  private double KLIMELIGHT_ANGLE = 0;
+  private double cammeraHight = 0;
+  private double cammeraAngle = 0;
   private double x;
   private double y;
   private boolean v;
@@ -32,6 +32,7 @@ public class Limelight {
   private double distanceFromTargetLimelightX;
   private double distanceFromTargetLimelightY;
   private double pipe;
+  private int tagid;
 
   private final NetworkTable table;
   private final NetworkTableEntry threeDimension;
@@ -46,15 +47,22 @@ public class Limelight {
   private final NetworkTableEntry thor ;//Horizontal sidelength of the rough bounding box (0 - 320 pixels)
   private final NetworkTableEntry tvert ;//Vertical sidelength of the rough bounding box (0 - 320 pixels)
   private final NetworkTableEntry getpipe;//True active pipeline index of the camera (0 .. 9)
+  private final NetworkTableEntry tid; // April tag id
 
-  private String PIAddress;
+  private final NetworkTableEntry botPose;
 
-  public Limelight(String tableName,double KDELTA_Y, double KLIMELIGHT_ANGLE,String PIAddress){
-    table = NetworkTableInstance.getDefault().getTable(tableName);//Check the name of the limelight
-    this.KDELTA_Y = KDELTA_Y;
-    this.KLIMELIGHT_ANGLE = KLIMELIGHT_ANGLE;
-    this.PIAddress = PIAddress;
+  private Pose2d estPose;
+  private double latency;
 
+
+  // private String PIAddress;
+
+  public Limelight(
+    String cammeraName, double cammeraHight, double cammeraAngle){
+
+    table = NetworkTableInstance.getDefault().getTable(cammeraName);
+    this.cammeraHight = cammeraHight;
+    this.cammeraAngle = cammeraAngle;
     threeDimension = table.getEntry("camtran");
     tx = table.getEntry("tx");//Horizontal Offset From Crosshair To Target (LL1: -27 degrees to 27 degrees | LL2: -29.8 to 29.8 degrees)
     ty = table.getEntry("ty");//Vertical Offset From Crosshair To Target (LL1: -20.5 degrees to 20.5 degrees | LL2: -24.85 to 24.85 degrees)
@@ -67,11 +75,27 @@ public class Limelight {
     thor = table.getEntry("thor");//Horizontal sidelength of the rough bounding box (0 - 320 pixels)
     tvert = table.getEntry("tvert");//Vertical sidelength of the rough bounding box (0 - 320 pixels)
     getpipe = table.getEntry("getpipe");//True active pipeline index of the camera (0 .. 9)
+
+    botPose = table.getEntry("botpose_wpiblue");
+
+    tid = table.getEntry("tid");
   }
 
   public double distance() {
-    double limelightAngle = y + KLIMELIGHT_ANGLE;
-    return Math.tan(limelightAngle) / KDELTA_Y;
+    if (getTagId() <= 0) {
+      return -1;
+    }
+    double[] aprilTagsHights = {
+     1.22, 1.22, 1.32, 1.32, 1.22,
+      1.22, 1.32, 1.32, 1.22, 1.22,
+      1.21, 1.21, 1.21, 1.21, 1.21, 1.21
+    };
+    if (getTagId() - 1 < 0 || getTagId() - 1 >= aprilTagsHights.length) {
+      return -1;
+    }
+    double deltaHight = aprilTagsHights[getTagId() - 1] - cammeraHight;
+    double deltaAngle = getY() + cammeraAngle;
+    return deltaHight / Math.tan(Math.toRadians(deltaAngle));
   }
 
   public void setLedMode(int ledMode) {
@@ -102,7 +126,7 @@ public class Limelight {
     return this.targetArea;
   }
 
-  public Boolean getV(){
+  public Boolean hasTarget(){
     return this.v;
   }
 
@@ -146,39 +170,23 @@ public class Limelight {
     return this.distanceFromTargetLimelightY;
   }
 
-  public boolean isConnected()
-  {
-      boolean isConnected = false;
-      try
-      {
-          InetAddress limeliInetAddress = InetAddress.getByName(PIAddress);
-          //System.out.println("Sending Ping Request to " + limeliInetAddress);
+  public Pose2d getEstPose() {
+    return estPose;
+  }
 
-          if (limeliInetAddress.isReachable(500))
-          {
-              isConnected = true;
-          }
-          System.out.println("isConnected:" + isConnected);
-          return isConnected;
-      }
-      catch (UnknownHostException e)
-      {
-          System.out.println("I can't reach this IPAddres: " + e.getMessage());
-          e.printStackTrace();
-      }
-      catch (IOException e)
-      {
-          System.out.println("IO Exception" + e.getMessage());
-      }
+  public double getTimeStamp() {
+    return Timer.getFPGATimestamp() - (latency / 1000);
+  }
 
-      return false;
+  public int getTagId() {
+    return tagid;
   }
 
   public void periodic() {
     x = tx.getDouble(0.0);
     y = ty.getDouble(0.0);
     targetArea = ta.getDouble(0.0);
-    v = tv.getBoolean(false);
+    v = tv.getDouble(0) == 0 ? false : true;
     skew = ts.getDouble(0.0);
     l = tl.getDouble(0.0);
     pipe = getpipe.getDouble(0.0);
@@ -186,10 +194,26 @@ public class Limelight {
     Thor = thor.getDouble(0.0);
     Tvert = tvert.getDouble(0.0);
     Tshort = tshort.getDouble(0.0);
+    tagid = (int) tid.getInteger(0);
     yaw = threeDimension.getDoubleArray(new double[] { 0, 0, 0, 0, 0, 0, 0 })[4];
     distanceFromTargetLimelightX = threeDimension.getDoubleArray(new double[] { 0, 0, 0, 0, 0, 0 })[0];
     distanceFromTargetLimelightY = threeDimension.getDoubleArray(new double[] { 0, 0, 0, 0, 0, 0 })[2];
-    isConnected();
+
+    NetworkTableEntry botposeEntry;
+    botposeEntry = botPose;
+
+    double[] data = botposeEntry.getDoubleArray(new double[7]);
+    latency = data[6];
+    Pose3d pose = new Pose3d(
+      data[0],
+      data[1],
+      data[2],
+      new Rotation3d(
+              Math.toRadians(data[3]),
+              Math.toRadians(data[4]),
+              Math.toRadians(data[5])));
+
+    estPose = pose.toPose2d();
   }
 
 }
