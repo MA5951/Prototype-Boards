@@ -50,8 +50,6 @@ public class Robot extends TimedRobot {
       m_autonomousCommand.cancel();
     }
 
-    SwerveDrivetrainSubsystem.getInstance().fixOffsetAuto();
-
     CommandScheduler.getInstance().setDefaultCommand(
       SwerveDrivetrainSubsystem.getInstance(), 
       new DriveSwerveCommand(
