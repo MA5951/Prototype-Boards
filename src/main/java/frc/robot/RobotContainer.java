@@ -2,7 +2,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
-import frc.robot.subsystems.proto.Proto;
+import frc.robot.subsystems.Intake.Intake;
 import frc.robot.subsystems.swerve.SwerveDrivetrainSubsystem;
 
 public class RobotContainer {
@@ -34,15 +34,9 @@ public class RobotContainer {
       new InstantCommand(SwerveDrivetrainSubsystem.getInstance()::updateOffset)
     );
 
+    driverController.R1().whileTrue(new InstantCommand( () -> Intake.getInstance().turnOn()));
 
-    driverController.square().whileTrue(
-      new InstantCommand(
-        () -> Proto.getInstance().activateMotors()
-      )
-    ).whileFalse(
-      new InstantCommand(
-        () -> Proto.getInstance().stopMotors()
-      )
-    );
+    driverController.L1().whileTrue(new InstantCommand( () -> Intake.getInstance().turnOFF()));
+
   }
 }
