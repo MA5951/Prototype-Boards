@@ -14,43 +14,40 @@ public class RunInternallyControlledSubsystem extends Command {
   /** Creates a new ControlCommand. */
   private InternallyControlledSubsystem subsystem;
   private Supplier<Double> setPoint;
-  private boolean needToStopGivingPowerAtTheEnd;
+  private boolean StopAtEnd;
 
   public RunInternallyControlledSubsystem(
     InternallyControlledSubsystem subsystem,
     Supplier<Double> setPoint,
-    boolean needToStopGivingPowerAtTheEnd) {
+    boolean StopAtEnd) {
     this.subsystem = subsystem;
     this.setPoint = setPoint;
-    this.needToStopGivingPowerAtTheEnd = needToStopGivingPowerAtTheEnd;
+    this.StopAtEnd = StopAtEnd;
     addRequirements(subsystem);
   }
 
   public RunInternallyControlledSubsystem(
     InternallyControlledSubsystem subsystem,
     double setPoint, boolean needToStopGivingPowerAtTheEnd) {
-  this.subsystem = subsystem;
-  this.setPoint = () -> setPoint;
-  this.needToStopGivingPowerAtTheEnd = needToStopGivingPowerAtTheEnd;
-  addRequirements(subsystem);
-}
+      this(subsystem, () -> setPoint, needToStopGivingPowerAtTheEnd);
+  }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    subsystem.setSetPoint(setPoint.get());
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    subsystem.setSetPoint(setPoint.get());
     subsystem.calculate(setPoint.get());
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    if (!needToStopGivingPowerAtTheEnd) {
+    if (StopAtEnd) {
       subsystem.setPower(0);
     }
   }

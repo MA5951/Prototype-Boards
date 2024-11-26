@@ -2,14 +2,15 @@ package com.ma5951.utils;
 
 import java.util.HashMap;
 
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import com.revrobotics.CANSparkBase.IdleMode;
-import com.revrobotics.CANSparkLowLevel.MotorType;
 
 public class MAShuffleboard {
     private ShuffleboardTab board;
@@ -78,8 +79,8 @@ public class MAShuffleboard {
 
     public void addNeutralModeChooser(String title) {
         SendableChooser<IdleMode> chooser = new SendableChooser<>();
-        chooser.addOption("Brake", IdleMode.kBrake);
-        chooser.setDefaultOption("Coast", IdleMode.kCoast);
+        chooser.setDefaultOption("Brake", IdleMode.kBrake);
+        chooser.addOption("Coast", IdleMode.kCoast);
         neutralModeChoosers.put(title, chooser);
         board.add(title, chooser);
     }
@@ -94,8 +95,8 @@ public class MAShuffleboard {
 
     public void addBrushModeChooser(String title) {
         SendableChooser<MotorType> chooser = new SendableChooser<>();
-        chooser.addOption("Brushed", MotorType.kBrushed);
-        chooser.setDefaultOption("Brushless", MotorType.kBrushless);
+        chooser.setDefaultOption("Brushed", MotorType.kBrushed);
+        chooser.addOption("Brushless", MotorType.kBrushless);
         brushModeChoosers.put(title, chooser);
         board.add(title, chooser);
     }
@@ -110,8 +111,8 @@ public class MAShuffleboard {
 
     public void addBooleanChooser(String title) {
         SendableChooser<Boolean> chooser = new SendableChooser<>();
-        chooser.addOption("True", true);
-        chooser.setDefaultOption("False", false);
+        chooser.setDefaultOption("True", true);
+        chooser.addOption("False", false);
         booleanChoosers.put(title, chooser);
         board.add(title, chooser);
     }
