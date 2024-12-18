@@ -47,7 +47,9 @@ public class Robot extends TimedRobot {
   }
 
   @Override
-  public void teleopExit() {}
+  public void teleopExit() {
+    //TODO
+  }
 
   @Override
   public void testInit() {
