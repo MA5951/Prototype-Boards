@@ -79,8 +79,8 @@ public class MAShuffleboard {
 
     public void addNeutralModeChooser(String title) {
         SendableChooser<IdleMode> chooser = new SendableChooser<>();
-        chooser.setDefaultOption("Brake", IdleMode.kBrake);
-        chooser.addOption("Coast", IdleMode.kCoast);
+        chooser.setDefaultOption("Coast", IdleMode.kCoast);
+        chooser.addOption("Brake", IdleMode.kBrake);
         neutralModeChoosers.put(title, chooser);
         board.add(title, chooser);
     }
@@ -111,8 +111,8 @@ public class MAShuffleboard {
 
     public void addBooleanChooser(String title) {
         SendableChooser<Boolean> chooser = new SendableChooser<>();
-        chooser.setDefaultOption("True", true);
-        chooser.addOption("False", false);
+        chooser.setDefaultOption("False", false);
+        chooser.addOption("True", true);
         booleanChoosers.put(title, chooser);
         board.add(title, chooser);
     }
