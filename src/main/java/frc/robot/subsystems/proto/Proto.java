@@ -28,10 +28,10 @@ public class Proto {
     private double[] prevVelocity;
 
     private Proto() {
-        MotorOne = new SparkMax(4, MotorType.kBrushless);
-        MotorTwo = new SparkMax(30, MotorType.kBrushless);
-        MotorThree = new SparkMax(14, MotorType.kBrushless);
-        MotorFour = new SparkMax(3, MotorType.kBrushless);
+        MotorOne = new SparkMax(1, MotorType.kBrushless);
+        MotorTwo = new SparkMax(2, MotorType.kBrushless);
+        MotorThree = new SparkMax(3, MotorType.kBrushless);
+        MotorFour = new SparkMax(4, MotorType.kBrushless);
 
         time = Timer.getFPGATimestamp();
         prevTime = time;
