@@ -15,8 +15,7 @@ public class Proto {
 
     private SparkMax MotorOne;
     private SparkMax MotorTwo;
-    private SparkMax MotorThree;
-    private SparkMax MotorFour;
+
 
     private double numForShuffleBoard;
 
@@ -28,14 +27,13 @@ public class Proto {
     private double[] prevVelocity;
 
     private Proto() {
-        MotorOne = new SparkMax(1, MotorType.kBrushless);
-        MotorTwo = new SparkMax(2, MotorType.kBrushless);
-        MotorThree = new SparkMax(3, MotorType.kBrushless);
-        MotorFour = new SparkMax(4, MotorType.kBrushless);
+        MotorOne = new SparkMax(5, MotorType.kBrushless);
+        MotorTwo = new SparkMax(6, MotorType.kBrushless);
+
 
         time = Timer.getFPGATimestamp();
         prevTime = time;
-        prevVelocity = new double[] {0, 0, 0, 0};
+        prevVelocity = new double[] {0, 0}; 
 
         settingBoard = new MAShuffleboard("Settings");
 
@@ -43,23 +41,18 @@ public class Proto {
 
         settingBoard.addNum("Motor 1 Precent Speed", numForShuffleBoard);
         settingBoard.addNum("Motor 2 Precent Speed", numForShuffleBoard);
-        settingBoard.addNum("Motor 3 Precent Speed", numForShuffleBoard);
-        settingBoard.addNum("Motor 4 Precent Speed", numForShuffleBoard);
 
         settingBoard.addNum("Motor 1 Gear Ratio", numForShuffleBoard);
         settingBoard.addNum("Motor 2 Gear Ratio", numForShuffleBoard);
-        settingBoard.addNum("Motor 3 Gear Ratio", numForShuffleBoard);
-        settingBoard.addNum("Motor 4 Gear Ratio", numForShuffleBoard);
+
 
         settingBoard.addNeutralModeChooser("Motor 1 Neutral Mode");
         settingBoard.addNeutralModeChooser("Motor 2 Neutral Mode");
-        settingBoard.addNeutralModeChooser("Motor 3 Neutral Mode");
-        settingBoard.addNeutralModeChooser("Motor 4 Neutral Mode");
+
 
         settingBoard.addBooleanChooser("Motor 1 Enabled");
         settingBoard.addBooleanChooser("Motor 2 Enabled");
-        settingBoard.addBooleanChooser("Motor 3 Enabled");
-        settingBoard.addBooleanChooser("Motor 4 Enabled");
+
 
         board = new MAShuffleboard("Prototype");
 
@@ -71,13 +64,7 @@ public class Proto {
         board.addNum("motor 2 distance", 0);
         board.addNum("motor 2 acceleration", 0);
 
-        board.addNum("motor 3 velocity", 0);
-        board.addNum("motor 3 distance", 0);
-        board.addNum("motor 3 acceleration", 0);
 
-        board.addNum("motor 4 velocity", 0);
-        board.addNum("motor 4 distance", 0);
-        board.addNum("motor 4 acceleration", 0);
     }
 
     private void configureMotor(SparkMax motor, IdleMode idleMode) {
@@ -89,8 +76,7 @@ public class Proto {
     public void activateMotors() {
         configureMotor(MotorOne, settingBoard.getNeutralMode("Motor 1 Neutral Mode"));
         configureMotor(MotorTwo, settingBoard.getNeutralMode("Motor 2 Neutral Mode"));
-        configureMotor(MotorThree, settingBoard.getNeutralMode("Motor 3 Neutral Mode"));
-        configureMotor(MotorFour, settingBoard.getNeutralMode("Motor 4 Neutral Mode"));
+
         
         if (settingBoard.getBooleanChooser("Motor 1 Enabled")) {
         MotorOne.setVoltage(settingBoard.getNum("Motor 1 Precent Speed") * 12);
@@ -101,16 +87,6 @@ public class Proto {
         MotorTwo.setVoltage(settingBoard.getNum("Motor 2 Precent Speed") * 12);
         } else {
         MotorTwo.setVoltage(0);
-        }
-        if (settingBoard.getBooleanChooser("Motor 3 Enabled")) {
-        MotorThree.setVoltage(settingBoard.getNum("Motor 3 Precent Speed") * 12);
-        } else {
-        MotorThree.setVoltage(0);
-        }
-        if (settingBoard.getBooleanChooser("Motor 4 Enabled")) {
-        MotorFour.setVoltage(settingBoard.getNum("Motor 4 Precent Speed") * 12);
-        } else {
-        MotorFour.setVoltage(0);
         }
     }
 
@@ -126,24 +102,14 @@ public class Proto {
         board.addNum("motor 2 acceleration", (MotorTwo.getEncoder().getVelocity() - prevVelocity[1]) * settingBoard.getNum("Motor 2 Gear Ratio") / (time - prevTime));
         prevVelocity[1] = MotorTwo.getEncoder().getVelocity();
         
-        board.addNum("motor 3 velocity", MotorThree.getEncoder().getVelocity() * settingBoard.getNum("Motor 3 Gear Ratio"));
-        board.addNum("motor 3 distance", MotorThree.getEncoder().getPosition() * settingBoard.getNum("Motor 3 Gear Ratio"));
-        board.addNum("motor 3 acceleration", (MotorThree.getEncoder().getVelocity() - prevVelocity[2]) * settingBoard.getNum("Motor 3 Gear Ratio") / (time - prevTime));
-        prevVelocity[2] = MotorThree.getEncoder().getVelocity();
         
-        board.addNum("motor 4 velocity", MotorFour.getEncoder().getVelocity() * settingBoard.getNum("Motor 4 Gear Ratio"));
-        board.addNum("motor 4 distance", MotorFour.getEncoder().getPosition() * settingBoard.getNum("Motor 4 Gear Ratio"));
-        board.addNum("motor 4 acceleration", (MotorFour.getEncoder().getVelocity() - prevVelocity[3]) * settingBoard.getNum("Motor 4 Gear Ratio") / (time - prevTime));
-        prevVelocity[3] = MotorFour.getEncoder().getVelocity();
-
         prevTime = time;
     }
 
     public void stopMotors() {
         MotorOne.setVoltage(0);
         MotorTwo.setVoltage(0);
-        MotorThree.setVoltage(0);
-        MotorFour.setVoltage(0);
+
     }
     
     public static Proto getInstance() {
