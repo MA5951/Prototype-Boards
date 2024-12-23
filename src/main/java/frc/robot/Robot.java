@@ -1,5 +1,7 @@
 package frc.robot;
 
+import edu.wpi.first.net.WebServer;
+import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.TimedRobot;
 import frc.robot.subsystems.proto.Proto;
 
@@ -10,6 +12,7 @@ public class Robot extends TimedRobot {
     Proto.getInstance();
     Proto.getInstance().activateMotors();
     Proto.getInstance().shuffleBoardOutputs();
+    WebServer.start(5800,Filesystem.getDeployDirectory().getParent());
   }
 
   @Override
