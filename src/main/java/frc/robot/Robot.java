@@ -10,6 +10,7 @@ public class Robot extends TimedRobot {
     Proto.getInstance();
     Proto.getInstance().activateMotors();
     Proto.getInstance().shuffleBoardOutputs();
+    WebServer.start(5800,Filesystem.getDeployDirectory().getPath());
   }
 
   @Override
