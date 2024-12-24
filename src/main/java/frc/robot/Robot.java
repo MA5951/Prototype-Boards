@@ -1,5 +1,7 @@
 package frc.robot;
 
+import edu.wpi.first.net.WebServer;
+import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.TimedRobot;
 import frc.robot.subsystems.proto.Proto;
 
