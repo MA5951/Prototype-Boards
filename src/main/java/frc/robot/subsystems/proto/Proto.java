@@ -8,6 +8,7 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Timer;
 
 public class Proto {
@@ -15,6 +16,12 @@ public class Proto {
 
     private SparkMax MotorOne;
     private SparkMax MotorTwo;
+
+    private DigitalInput sensor1;
+    private DigitalInput sensor2;
+    private DigitalInput sensor3;
+    private DigitalInput sensor4;
+
 
 
     private double numForShuffleBoard;
@@ -29,6 +36,12 @@ public class Proto {
     private Proto() {
         MotorOne = new SparkMax(5, MotorType.kBrushless);
         MotorTwo = new SparkMax(6, MotorType.kBrushless);
+
+        sensor1 = new DigitalInput(1);
+        sensor2 = new DigitalInput(2);
+        sensor3 = new DigitalInput(3);
+        sensor3 = new DigitalInput(4);
+
 
 
         time = Timer.getFPGATimestamp();
@@ -90,6 +103,22 @@ public class Proto {
         }
     }
 
+    public boolean getSensore1() {
+        return sensor1.get();
+    }
+
+    public boolean getSensore2() {
+        return sensor2.get();
+    }
+
+    public boolean getSensore3() {
+        return sensor3.get();
+    }
+
+    public boolean getSensore4() {
+        return sensor4.get();
+    }
+
     public void shuffleBoardOutputs() {
         time = Timer.getFPGATimestamp();
         board.addNum("motor 1 velocity", MotorOne.getEncoder().getVelocity() *  settingBoard.getNum("Motor 1 Gear Ratio"));
@@ -102,6 +131,12 @@ public class Proto {
         board.addNum("motor 2 acceleration", (MotorTwo.getEncoder().getVelocity() - prevVelocity[1]) * settingBoard.getNum("Motor 2 Gear Ratio") / (time - prevTime));
         prevVelocity[1] = MotorTwo.getEncoder().getVelocity();
         
+
+        board.addBoolean("sensor 1", getSensore1());
+        board.addBoolean("sensor 2", getSensore2());
+        board.addBoolean("sensor 3", getSensore3());
+        board.addBoolean("sensor 4", getSensore4());
+
         
         prevTime = time;
     }
